@@ -1,9 +1,13 @@
 # kubectl-run
 
+Here are snippets of `kubectl run`.
+
 ## PostgreSQL (psql)
 
+You can access to a host as:
+
 ```
-% kubectl run psql --image=postgres:10 --rm -it -- psql -h $postgres_host -U $postgres_user -W postgres
+% kubectl run psql --image=postgres:10 --rm -it -- psql -h HOST -U USER -W postgres
 If you don't see a command prompt, try pressing enter.
 
 psql (10.8 (Debian 10.8-1.pgdg90+1), server 10.6)
@@ -19,4 +23,16 @@ You need to enter your password. After authentication you can execute SQLs, for 
 CREATE DATABASE keycloak;
 CREATE USER keycloak PASSWORD 'keycloak';
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
+```
+
+### Enable pg_tram
+
+You can enable pg_tram for a specific database as:
+
+```
+% kubectl run psql --image=postgres:10 --rm -it -- psql -h HOST -U USER -W DATABASE
+```
+
+```sql
+CREATE EXTENSION pg_trgm;
 ```
