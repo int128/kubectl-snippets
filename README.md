@@ -1,8 +1,38 @@
-# kubectl-run
+# kubectl-snippets
 
-Here are snippets of `kubectl run`.
+Here are snippets of `kubectl`.
 
-## PostgreSQL (psql)
+
+## Query
+
+- https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns
+
+### Get pods with resources requests
+
+```
+% kubectl get po --all-namespaces -o "custom-columns=NAME:.metadata.name,IP:.status.hostIP,RES:.spec.containers[0].resources.requests" --sort-by .status.hostIP
+NAME                                                                  IP              RES
+kube-dns-6c4cb66dfb-w69l7                                             172.20.57.157   map[cpu:100m memory:70Mi]
+heapster-heapster-697757c69d-4fjpr                                    172.20.57.157   map[cpu:190m memory:224Mi]
+kube-apiserver-ip-172-20-60-136.us-west-2.compute.internal            172.20.60.136   map[cpu:150m]
+kube-scheduler-ip-172-20-60-136.us-west-2.compute.internal            172.20.60.136   map[cpu:100m]
+kube-controller-manager-ip-172-20-60-136.us-west-2.compute.internal   172.20.60.136   map[cpu:100m]
+kube-proxy-ip-172-20-60-136.us-west-2.compute.internal                172.20.60.136   map[cpu:100m]
+```
+
+### Get nodes with labels and taints
+
+```
+% kubectl get nodes -ocustom-columns=NAME:.metadata.name,CREATED:.metadata.creationTimestamp,LABELS:.metadata.labels,TAINTS:.spec.taints
+NAME                                               CREATED                LABELS                                                                                                                                                                                                                                                                                                                                                    TAINTS
+ip-172-19-68-180.ap-northeast-1.compute.internal   2019-12-02T07:51:11Z   map[beta.kubernetes.io/arch:amd64 beta.kubernetes.io/instance-type:m4.large beta.kubernetes.io/os:linux failure-domain.beta.kubernetes.io/region:ap-northeast-1 failure-domain.beta.kubernetes.io/zone:ap-northeast-1a kubernetes.io/arch:amd64 kubernetes.io/hostname:ip-172-19-68-180.ap-northeast-1.compute.internal kubernetes.io/os:linux]           <none>
+ip-172-19-70-235.ap-northeast-1.compute.internal   2019-12-02T09:05:53Z   map[app:foo beta.kubernetes.io/arch:amd64 beta.kubernetes.io/instance-type:m4.large beta.kubernetes.io/os:linux failure-domain.beta.kubernetes.io/region:ap-northeast-1 failure-domain.beta.kubernetes.io/zone:ap-northeast-1a kubernetes.io/arch:amd64 kubernetes.io/hostname:ip-172-19-70-235.ap-northeast-1.compute.internal kubernetes.io/os:linux]   [map[effect:NoExecute key:app value:foo]]
+ip-172-19-71-23.ap-northeast-1.compute.internal    2019-12-02T09:05:44Z   map[app:bar beta.kubernetes.io/arch:amd64 beta.kubernetes.io/instance-type:m4.large beta.kubernetes.io/os:linux failure-domain.beta.kubernetes.io/region:ap-northeast-1 failure-domain.beta.kubernetes.io/zone:ap-northeast-1a kubernetes.io/arch:amd64 kubernetes.io/hostname:ip-172-19-71-23.ap-northeast-1.compute.internal kubernetes.io/os:linux]    [map[effect:NoExecute key:app value:bar]]
+```
+
+## Run
+
+### PostgreSQL (psql)
 
 You can access to a host as:
 
@@ -25,7 +55,7 @@ CREATE USER keycloak PASSWORD 'keycloak';
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
 ```
 
-### Enable pg_tram
+#### Enable pg_tram
 
 You can enable pg_tram for a specific database as:
 
@@ -37,7 +67,7 @@ You can enable pg_tram for a specific database as:
 CREATE EXTENSION pg_trgm;
 ```
 
-## AWS
+### AWS S3
 
 To list S3 buckets:
 
