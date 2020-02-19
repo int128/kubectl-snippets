@@ -69,6 +69,13 @@ CREATE EXTENSION pg_trgm;
 
 ### AWS S3
 
+To enter the shell:
+
+```console
+% kubectl run aws-cli -it --rm --image fstab/aws-cli --restart=Never -- /bin/bash
+(env) aws@aws-cli:~$ aws --debug --region ap-northeast-1 s3 ls
+```
+
 To list S3 buckets:
 
 ```sh
