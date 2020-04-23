@@ -67,20 +67,21 @@ You can enable pg_tram for a specific database as:
 CREATE EXTENSION pg_trgm;
 ```
 
-### AWS S3
+### AWS CLI
 
 To enter the shell:
 
 ```console
-% kubectl run aws-cli -it --rm --image fstab/aws-cli --restart=Never -- /bin/bash
-(env) aws@aws-cli:~$ aws --debug --region ap-northeast-1 s3 ls
+% kubectl run aws -it --rm --image amazon/aws-cli --restart=Never --command -- /bin/bash
+bash-4.2# aws --debug --region ap-northeast-1 s3 ls
 ```
 
 To list S3 buckets:
 
 ```sh
-kubectl run aws -i --rm --image fstab/aws-cli --restart=Never -- /home/aws/aws/env/bin/aws s3 ls
+kubectl run s3 -i --rm --image amazon/aws-cli --restart=Never -- s3 ls
 
 # kube2iam
-kubectl run s3 -i --rm --image fstab/aws-cli --restart=Never --overrides '{"metadata":{"annotations":{"iam.amazonaws.com/role":"ROLE"}}}' -- /home/aws/aws/env/bin/aws s3 ls
+kubectl run s3 -i --rm --image amazon/aws-cli --restart=Never \
+  --overrides '{"metadata":{"annotations":{"iam.amazonaws.com/role":"ROLE"}}}' -- s3 ls
 ```
