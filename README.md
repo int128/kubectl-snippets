@@ -81,6 +81,11 @@ To list S3 buckets:
 ```sh
 kubectl run s3 -i --rm --image amazon/aws-cli --restart=Never -- s3 ls
 
+# IRSA
+kubectl create sa s3-test
+kubectl annotate sa s3-test "eks.amazonaws.com/role-arn=arn:aws:iam::ACCOUNT:role/NAME"
+kubectl run s3 -i --rm --image amazon/aws-cli --restart=Never --serviceaccount=s3-test -- s3 ls
+
 # kube2iam
 kubectl run s3 -i --rm --image amazon/aws-cli --restart=Never \
   --overrides '{"metadata":{"annotations":{"iam.amazonaws.com/role":"ROLE"}}}' -- s3 ls
